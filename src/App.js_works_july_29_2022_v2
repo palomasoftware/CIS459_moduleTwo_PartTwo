@@ -5,12 +5,7 @@ import './App.css';
 import { VOTING_ABI, VOTING_ADDRESS } from './config'
 //import votingArtifact from "../../build/contracts/Voting.json";
 import fs from "fs"; 
-//1.) start ganache (include new DNS)
-//2.) update truffle-config wtih dns
-//2.) deploy contract
-//3.) copy over new Voting
-//4.) update DNS in DAPP
-//5.) npm start
+
 
 class App extends Component {
         state = { votes: '' }
@@ -106,10 +101,14 @@ console.log(account);
 
   }
  vote =()=> { 
-	
-	var identity = 'Johnny'
+// I cannot declare an async() function outside fo the main function
+	 // // I cannot get a promise to be fufilled by 
+	 // without using the await -> for which i need async()
 
-	 this.state.contract.methods.voteForCandidate(this.state.web3.utils.asciiToHex(identity)).send({gas: 140000, from: this.state.account });
+	 //async function 
+// best so far ....    	voteForCandidate = () => {
+//voteForCandidate: async () => { 
+	this.state.contract.methods.voteForCandidate(this.state.web3.utils.asciiToHex('Johnny')).send({gas: 140000, from: this.state.account });
         console.log("voteForCandidate")
 	var count = this.state.contract.methods.totalVotesFor(this.state.web3.utils.asciiToHex('Johnny')).call();	
 	console.log('just before the count')
