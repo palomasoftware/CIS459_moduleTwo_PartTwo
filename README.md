@@ -1,3 +1,58 @@
+//1.) start ganache (include new DNS)
+
+
+HEY DO NOT FORGET TO PUT THE "-h" in front of the DNS!!!!!acd 
+
+./node_modules/.bin/ganache-cli --port 8545  --chainId 5777 -h ec2-34-222-204-82.us-west-2.compute.amazonaws.com
+
+//2.) update truffle-config wtih dns
+
+//2.) deploy contract
+
+/home/ubuntu/node_modules/.bin/truffle deploy
+
+//3.) copy over new Voting
+
+ubuntu@ip-172-31-49-30:~/packt2/build/contracts$ cp Voting.json /home/ubuntu/packt2/src/Voting.json
+
+
+//4.) update DNS in DAPP
+//5.) npm start
+
+
+
+
+ ./node_modules/.bin/ganache-cli --port 8545  --chainId 5777 -h ec2-35-80-12-220.us-west-2.compute.amazonaws.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
