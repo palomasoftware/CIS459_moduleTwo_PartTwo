@@ -15,16 +15,9 @@
   },
   "browser": {
     "fs": false,
-     "path": false,
-     "os": false
- }
- , 
-  
-  
-  
-  
-  
-  
+    "path": false,
+    "os": false
+  },
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",

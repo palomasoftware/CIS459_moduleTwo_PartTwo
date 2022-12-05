@@ -20,7 +20,7 @@ class App extends Component {
  
 	async loadBlockchainData(){
 
-            const web3 = new Web3(new Web3.providers.HttpProvider("http://ec2-35-87-229-51.us-west-2.compute.amazonaws.com:8545"))
+            const web3 = new Web3(new Web3.providers.HttpProvider("http://ec2-35-80-32-53.us-west-2.compute.amazonaws.com:8545"))
 
 	    this.setState( { web3 } )
             var account;
@@ -44,8 +44,8 @@ class App extends Component {
      // const deployedNetwork = votingArtifact.networks[networkId];
 
 
-this.setState( { account : account }) 
-console.log(account);
+                this.setState( { account : account }) 
+                console.log(account);
 		const fs = require('fs');
 
 		let jsonData = require('./Voting.json');
@@ -64,25 +64,21 @@ console.log(account);
 		contract.options.address = jsonData['networks'][networkId]["address"]
 		this.setState( { contract }) 
 
-                const candidates = {"Johnny": "candidate-1", "Amber": "candidate-2"}
+                const candidates = {"Johnny": "candidate-1", "Amber": "candidate-2", "noneOfAbove": "candidate-3"}
 
                 await contract.methods.totalVotesFor(web3.utils.asciiToHex('Johnny')).call(console.log)
 
-                const number = await contract.methods.totalVotesFor(web3.utils.asciiToHex('Johnny')).call(console.log)
-                console.log("two")
+                let number = await contract.methods.totalVotesFor(web3.utils.asciiToHex('Johnny')).call(console.log)
 		this.setState( { johnnyVote : parseInt(number) } )
 
+                number = await contract.methods.totalVotesFor(web3.utils.asciiToHex('Amber')).call(console.log)
+                this.setState( { amberVote : parseInt(number) } )
 
 
-		const output =    await contract.methods.totalVotesFor(web3.utils.asciiToHex('Johnny')).call()
-		console.log(output)
+                number = await contract.methods.totalVotesFor(web3.utils.asciiToHex('noneOfAbove')).call(console.log)
+                this.setState( { noneOfAboveVote : parseInt(number) } )
 
 
-		await contract.methods.voteForCandidate(web3.utils.asciiToHex('Johnny')).send({gas: 140000, from: this.state.account  });
-
-		console.log("three")
-
-                await contract.methods.totalVotesFor(web3.utils.asciiToHex('Johnny')).call(console.log)
 
         }
 
@@ -92,6 +88,7 @@ console.log(account);
 			account: '',
 			johnnyVote: 0,
 			amberVote: 0,
+	   	        noneOfAboveVote: 0,	
 			loading: true
 			//data: todoList   // new portion
 
@@ -100,9 +97,9 @@ console.log(account);
 	console.log("constructor")
 
   this.vote = this.vote.bind(this)
+  this.vote2 = this.vote2.bind(this)
+  this.vote3 = this.vote3.bind(this)
 
- //  this.voteForJohnny = this.voteForJohnny.bind(this)
- //  this.voteForAmber = this.voteForAmber.bind(this)
 
   }
  vote =()=> { 
@@ -110,7 +107,7 @@ console.log(account);
 	var identity = 'Johnny'
 
 	 this.state.contract.methods.voteForCandidate(this.state.web3.utils.asciiToHex(identity)).send({gas: 140000, from: this.state.account });
-        console.log("voteForCandidate")
+        console.log("voteFor (Johnny) Candidate")
 	var count = this.state.contract.methods.totalVotesFor(this.state.web3.utils.asciiToHex('Johnny')).call();	
 	console.log('just before the count')
 	console.log(count.toString)
@@ -127,18 +124,54 @@ console.log(count2)
 
  }
 
+ vote2 =()=> {
+
+         var identity = 'Amber'
+
+         this.state.contract.methods.voteForCandidate(this.state.web3.utils.asciiToHex(identity)).send({gas: 140000, from: this.state.account });
+        console.log("voteFor amber Candidate")
+        var count = this.state.contract.methods.totalVotesFor(this.state.web3.utils.asciiToHex('Amber')).call();     
+        console.log('just before the count')
+        console.log(count.toString)
+        var num = count.toString
+        console.log(num)
+        this.setState( (prevState) => ({  amberVote: prevState.amberVote + 1}));
+
+ }
+
+
+
+
+	 vote3 =()=> {
+
+        var identity = 'noneOfAbove'
+        this.state.contract.methods.voteForCandidate(this.state.web3.utils.asciiToHex(identity)).send({gas: 140000, from: this.state.account });
+        console.log("voteForCandidate")
+        var count = this.state.contract.methods.totalVotesFor(this.state.web3.utils.asciiToHex('noneOfAbove')).call();
+        console.log('just before the count')
+        console.log(count.toString)
+        var num = count.toString
+        console.log(num)
+        this.setState( (prevState) => ({  noneOfAboveVote: prevState.noneOfAboveVote + 1}));
+        }
+
+
 
 render(){
 
         return (
             <>
                 <div>
-                    <button onClick={this.vote}> Uni Instruction</button>
-                    <button onClick={this.Scllevel}> School Instruction</button>
-                </div>
+                    <button onClick={this.vote}> Johnny Count </button>
+                    <button onClick={this.vote2}> Amber Count</button>
+                    <button onClick={this.vote3}> noneOfAbove Count</button>
+
+		</div>
                 <h5>Johnny count: {this.state.johnnyVote}</h5>
                 <h5>Amber count: {this.state.amberVote}</h5>
-            </>
+                <h5>noneOfAbove count: {this.state.noneOfAboveVote}</h5>
+
+		</>
         );
     }
 
